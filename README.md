@@ -7,15 +7,20 @@ status: 実装済み（FiveM 実機で動作確認済み）
 aliases:
   - ta-fishing
   - tani-fishing
+related:
+  - "[[FiveM-Script/README|FiveM-Script 目次]]"
+  - "[[設計案-釣り・採集]]"
 ---
 
 # ta-fishing（釣り）
 
-Qbox サーバー向けの釣りスクリプト。水辺ならどこでも釣れて、釣りレベル、5段階のグレード、漁師 NPC の店と買取（相場が動く）、ランキングがある。設計は [[設計案-釣り・採集]]、目次は [[FiveM-Script/README|FiveM-Script 目次]]。
+Qbox サーバー向けの釣りスクリプト。水辺ならどこでも釣れて、釣りレベル、5段階のグレード、漁師 NPC の店と買取（相場が動く）、ランキングがある。
 
 旧名は `tani-fishing`（2026-11-13 に `ta-fishing` へ変えた）。旧名のまま入れているサーバーは、古いフォルダを消してから入れ直す。記録のテーブルも `tani_fishing_players` から `ta_fishing_players` に変わったが、起動した時に新しいテーブルが空で古いテーブルがあれば、記録を自動で写す（古いテーブルは消さずに残す）。漁師の店の ID は `ta_fishing`、相場の GlobalState は `taFishingMarket` になった。
 
-> [!success] 動作確認済み
+> [!NOTE]
+> **動作確認済み**
+>
 > FiveM の実機で動作を確認した。サーバーとクライアントの処理は疑似環境でも通しで確かめている（下の「テスト」）。
 
 ## 遊び方

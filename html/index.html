@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ta-fishing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 釣りの最中のガイド（ゲームを操作しながら見るので、クリックは受け付けない） -->
+    <div id="guide" class="guide hidden" aria-live="polite">
+        <div class="guide-main">
+            <svg class="float" id="float" width="16" height="40" viewBox="0 0 16 40" aria-hidden="true">
+                <line x1="8" y1="0" x2="8" y2="10" stroke="currentColor" stroke-width="1.5" />
+                <path d="M8 10 C13 14 13 20 13 23 L3 23 C3 20 3 14 8 10 Z" class="float-top" />
+                <path d="M3 23 L13 23 C13 28 11 33 8 35 C5 33 3 28 3 23 Z" class="float-bottom" />
+                <line x1="8" y1="35" x2="8" y2="40" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <div class="guide-text">
+                <div class="guide-title" id="g-title">アタリを待っている</div>
+                <div class="guide-meta" id="g-meta"></div>
+            </div>
+            <div class="guide-side num" id="g-side"></div>
+        </div>
+
+        <!-- 糸の張り -->
+        <div class="reel hidden" id="reel">
+            <div class="gauge-row">
+                <span class="gauge-label">張り</span>
+                <div class="gauge" id="gauge">
+                    <div class="gauge-danger" id="gauge-danger"></div>
+                    <div class="gauge-fill" id="gauge-fill"></div>
+                </div>
+                <span class="gauge-value num" id="gauge-value">0</span>
+            </div>
+            <div class="gauge-row">
+                <span class="gauge-label">寄せ</span>
+                <div class="pull"><div class="pull-fill" id="pull-fill"></div></div>
+                <span class="gauge-value num" id="pull-value">0%</span>
+            </div>
+        </div>
+
+        <!-- 釣れたとき -->
+        <div class="catch hidden" id="catch">
+            <img class="catch-img" id="catch-img" alt="">
+            <div class="catch-body">
+                <div class="catch-head">
+                    <span class="catch-name" id="catch-name"></span>
+                    <span class="catch-exp num" id="catch-exp"></span>
+                </div>
+                <div class="catch-grade"><span class="diamond" id="catch-diamond"></span><span id="catch-grade"></span></div>
+                <div class="level-line">
+                    <div class="bar"><div class="bar-fill" id="catch-bar"></div></div>
+                    <span class="level-text num" id="catch-level"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="guide-keys" id="g-keys"></div>
+    </div>
+
+    <!-- 漁師の画面 -->
+    <div id="dialog" class="dialog hidden" role="dialog" aria-modal="true" aria-labelledby="who-name">
+        <aside class="rail">
+            <div class="who">
+                <div class="who-name" id="who-name">漁師</div>
+                <div class="who-place" id="who-place"></div>
+            </div>
+            <p class="speech" id="speech"></p>
+            <nav class="nav" id="nav">
+                <button type="button" class="nav-item" data-tab="sell">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>
+                    <span>魚を売る</span><span class="nav-count num" id="nav-count"></span>
+                </button>
+                <button type="button" class="nav-item" data-tab="market">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    <span>今の相場</span>
+                </button>
+                <button type="button" class="nav-item" data-tab="ranking">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    <span>ランキング</span>
+                </button>
+                <button type="button" class="nav-item" data-tab="record">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    <span>自分の記録</span>
+                </button>
+                <div class="nav-sep" id="nav-sep"></div>
+                <button type="button" class="nav-item" data-action="shop" id="nav-shop">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                    <span>道具を買う</span>
+                </button>
+            </nav>
+            <div class="rail-foot"><kbd>Esc</kbd><span>閉じる</span></div>
+        </aside>
+        <main class="content">
+            <header class="content-head">
+                <h2 id="c-title"></h2>
+                <div class="content-meta" id="c-meta"></div>
+            </header>
+            <div class="content-body" id="c-body"></div>
+            <footer class="content-foot hidden" id="c-foot"></footer>
+        </main>
+    </div>
+
+    <script src="reel.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
